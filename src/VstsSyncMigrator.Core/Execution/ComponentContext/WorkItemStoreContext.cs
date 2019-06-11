@@ -79,14 +79,19 @@ namespace VstsSyncMigrator.Engine
             {
                 string rwiid = workItemToFind.Fields[reflectedWotkItemIdField].Value.ToString();
                 int idToFind = GetReflectedWorkItemId(workItemToFind, reflectedWotkItemIdField);
+                Trace.WriteLine(string.Format("DEBUG rwiid:{0} idToFind:{1}", rwiid, idToFind), "MigrationContext"); // DEBUG
                 if (idToFind == 0)
                 {
                     found = null;
                 }
                 else
                 {
+                    Trace.WriteLine(string.Format("DEBUG workItemToFind:{0} reflectedWotkItemIdField:{1} rwiid:{2} idToFind:{3} ReflectedWorkItemId:{4}", workItemToFind.Id, reflectedWotkItemIdField, rwiid, idToFind, ReflectedWorkItemId), "MigrationContext");
                     found = Store.GetWorkItem(idToFind);
-                    if (!(found.Fields[reflectedWotkItemIdField].Value.ToString() == rwiid))
+                    Trace.WriteLine(string.Format("DEBUG found:{0}", found), "MigrationContext");
+
+                    //if (!(found.Fields[reflectedWotkItemIdField].Value.ToString() == rwiid))
+                    if (!(found.Fields[reflectedWotkItemIdField]?.Value?.ToString() == rwiid))
                     {
                         found = null;
                     }

@@ -78,6 +78,8 @@ namespace VstsSyncMigrator.Engine
             //////////////////////////////////////////////////
             WorkItemStoreContext targetStore = new WorkItemStoreContext(me.Target, WorkItemStoreFlags.BypassRules);
             Project destProject = targetStore.GetProject();
+            Trace.WriteLine(string.Format("DEBUG destProject:{0}", destProject.Uri.ToString()), this.Name);
+
             Trace.WriteLine(string.Format("Found target project as {0}", destProject.Name), this.Name);
 
             int current = sourceWIS.Count;
@@ -90,8 +92,12 @@ namespace VstsSyncMigrator.Engine
             {
                 Stopwatch witstopwatch = new Stopwatch();
                 witstopwatch.Start();
+                Trace.WriteLine(string.Format("DEBUG ReflectedWorkItemIdFieldName:{0} SourceReflectedWorkItemIdFieldName:{1}", me.ReflectedWorkItemIdFieldName, me.SourceReflectedWorkItemIdFieldName), this.Name);
+                Trace.WriteLine(string.Format("DEBUG sourceWI.URL:{0}", sourceWI.Store.TeamProjectCollection.Uri.ToString()), this.Name);
                 WorkItem targetFound;
-                targetFound = targetStore.FindReflectedWorkItem(sourceWI, me.ReflectedWorkItemIdFieldName, false);
+                //targetFound = targetStore.FindReflectedWorkItem(sourceWI, me.ReflectedWorkItemIdFieldName, false);
+                targetFound = targetStore.FindReflectedWorkItem(sourceWI, me.SourceReflectedWorkItemIdFieldName, false); // DEBUG
+                Trace.WriteLine(string.Format("DEBUG targetFound:{0}", targetFound == null), this.Name);
                 Trace.WriteLine(string.Format("{0} - Migrating: {1}-{2}", current, sourceWI.Id, sourceWI.Type.Name), this.Name);
                 if (targetFound == null)
                 {
